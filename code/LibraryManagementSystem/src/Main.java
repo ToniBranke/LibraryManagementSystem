@@ -53,7 +53,7 @@ public class Main
 
             Scanner UserInput = new Scanner(System.in);
             boolean running = true;
-            Book book = new Book();
+            Book book = new Book(connBooks);
 
             while(running)
             {
