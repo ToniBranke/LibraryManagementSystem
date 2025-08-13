@@ -1,7 +1,5 @@
 package methods;
 
-import org.sqlite.core.DB;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -44,11 +42,11 @@ public class Book
         System.out.println("format");
         String format = sc.nextLine();
 
-        System.out.println("USK (0, 6, 12, 16, 18):");
-        int USK = Integer.parseInt(sc.nextLine());
+        System.out.println("usk (0, 6, 12, 16, 18):");
+        int usk = Integer.parseInt(sc.nextLine());
 
         System.out.println("price:");
-        int price = Integer.parseInt(sc.nextLine());            //theoretically there should be a double (REAL) here
+        double price = Double.parseDouble(sc.nextLine());            //theoretically there should be a double (REAL) here
 
         System.out.println("Themes (divided by commas):");
         String themes = sc.nextLine();
@@ -56,8 +54,8 @@ public class Book
         System.out.println("status:");
         String status = sc.nextLine();
 
-        String sql = "INSERT INTO Books VALUES (ISBN, title, author, publisher, genre, publishingDate, language, format, usk, price, themes, status)"
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Books (ISBN, title, author, publisher, genre, publishingDate, language, format, usk, price, themes, status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql))
         {
@@ -69,8 +67,8 @@ public class Book
             pstmt.setString(6, publishingDate);
             pstmt.setString(7, language);
             pstmt.setString(8, format);
-            pstmt.setInt(9, USK);
-            pstmt.setInt(10, price);
+            pstmt.setInt(9, usk);
+            pstmt.setDouble(10, price);
             pstmt.setString(11, themes);
             pstmt.setString(12, status);
 
