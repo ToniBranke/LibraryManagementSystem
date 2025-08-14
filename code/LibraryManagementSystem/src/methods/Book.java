@@ -74,11 +74,84 @@ public class Book
 
             pstmt.executeUpdate();
             System.out.println("Book added successfully!");
-
         }
         catch (SQLException e)
         {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteBook()
+    {
+        Scanner scDelete = new Scanner(System.in);
+
+        System.out.println("Please enter the ISBM of the Book you  would like to delete");
+
+        String isbnDelete = scDelete.nextLine();
+
+        String sql = "DELETE FROM Books WHERE ISBN = ?";
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.setString(1, isbnDelete);
+
+            pstmt.executeUpdate();
+            System.out.println("Book at"+ isbnDelete +"deleted successfully!");
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void manipulateBook()
+    {
+        Scanner scManipulate = new Scanner(System.in);
+
+        System.out.println("What would you like to manipulate?");
+        String manipulate = scManipulate.nextLine();
+
+        switch (manipulate)
+        {
+            case "1":
+                manipulateBook.manIsbn();
+                break;
+            case "2":
+                manipulateBook.manTitle();
+                break;
+            case "3":
+                manipulateBook.manAuthor();
+                break;
+            case "4":
+                manipulateBook.manPubliisher();
+                break;
+            case "5":
+                manipulateBook.manGenre();
+                break;
+            case "6":
+                manipulateBook.manPubDate();
+                break;
+            case "7":
+                manipulateBook.manLang();
+                break;
+            case "8":
+                manipulateBook.manformat();
+                break;
+            case "9":
+                manipulateBook.manUsk();
+                break;
+            case "10":
+                manipulateBook.manPrice();
+                break;
+            case "11":
+                manipulateBook.manThemes();
+                break;
+            case "12":
+                manipulateBook.manStatus();
+                break;
+            default:
+                System.out.println("Invalid input!");
+                break;
         }
     }
 }
