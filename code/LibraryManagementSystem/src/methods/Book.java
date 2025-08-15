@@ -2,6 +2,7 @@ package methods;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -111,8 +112,6 @@ public class Book
         manipulateBook manipulator = new manipulateBook(conn);
         boolean running = true;
 
-
-
         while (running)
         {
             System.out.println("What would you like to manipulate?\n  1. ISBN\n  2. Title\n  3. Author\n  4. Publisher\n  5.Genre\n" +
@@ -133,7 +132,7 @@ public class Book
                     manipulator.manAuthor();
                     break;
                 case "4":
-                    manipulator.manPubliisher();
+                    manipulator.manPublisher();
                     break;
                 case "5":
                     manipulator.manGenre();
@@ -167,5 +166,38 @@ public class Book
                     break;
             }
         }
+    }
+
+    public void searchBook()
+    {
+        boolean running = true;
+        while(running)
+        {
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("what would you like to display?\n  1. display everything\n  2. Title\n  3. Author\n  4. Publisher\n  5. Genre\n 6. Publishing Date\n  6. Language\n  7. Format\n" +
+                    "  8. USK\n  9. Price\n  11. Themes\n  12. Status\n  13. Exit");
+            String search = sc.nextLine();
+            switch (search)
+            {
+                case "1":
+                    System.out.println("Please enter the ISBN of the Book you search:");
+                    String isbnSearch = sc.nextLine();
+
+                    String sql = "SELECT * FROM Books WHERE ISBN = ?";
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql))
+                    {
+                        pstmt.setString(1, isbnSearch);
+                        ResultSet rs = pstmt.executeQuery();
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+            }
+
+        }
+
     }
 }

@@ -58,7 +58,7 @@ public class Main
 
             while(running)
             {
-                System.out.println("=== main menu ===\n  1. add Book\n  2. delete a Book\n  3. change books \n  4. exit \nplease enter your choice:");
+                System.out.println("=== main menu ===\n  1. add Book\n  2. delete a Book\n  3. change books \n  4. search for books\n  5. exit \nplease enter your choice:");
                 String input = UserInput.nextLine();
                 switch (input)
                 {
@@ -72,6 +72,9 @@ public class Main
                         book.manipulateBook();
                         break;
                     case "4":
+                        book.searchBook();
+                        break;
+                    case "5":
                         running = false;
                         break;
                     default:

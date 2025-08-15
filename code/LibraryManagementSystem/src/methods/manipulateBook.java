@@ -85,7 +85,7 @@ public class manipulateBook
         }
     }
 
-    public void manPubliisher()
+    public void manPublisher()
     {
         Scanner scPub = new Scanner(System.in);
         System.out.println("=== change the Publisher of which Book? ===\n please enter the ISBN of the book you want to change:");
