@@ -85,7 +85,7 @@ public class Book
     {
         Scanner scDelete = new Scanner(System.in);
 
-        System.out.println("Please enter the ISBM of the Book you  would like to delete");
+        System.out.println("Please enter the ISBN of the Book you  would like to delete");
 
         String isbnDelete = scDelete.nextLine();
 
@@ -108,7 +108,9 @@ public class Book
     {
         Scanner scManipulate = new Scanner(System.in);
 
-        System.out.println("What would you like to manipulate?");
+        System.out.println("What would you like to manipulate?\n  1. ISBN\n  2. Title\n  3. Author\n  4. Publisher\n  5.Genre\n" +
+                "  6. Publishing Date (DD-MM-YYYY)\n  7. Language\n  8. Format\n  9. USK\n  10. Price\n  11. Themes\n  12. Status\n" +
+                "Please enter your chooice:");
         String manipulate = scManipulate.nextLine();
 
         switch (manipulate)
@@ -150,7 +152,7 @@ public class Book
                 manipulateBook.manStatus();
                 break;
             default:
-                System.out.println("Invalid input!");
+                System.out.println("Invalid input please enter a valid answer!");
                 break;
         }
     }
