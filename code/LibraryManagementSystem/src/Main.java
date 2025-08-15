@@ -50,7 +50,7 @@ public class Main
             Connection connEmployees = DriverManager.getConnection(urlEmployees))
         {
             System.out.println("Books-DB-URL: " + connBooks.getMetaData().getURL());
-            System.out.println("Connection to the Databases has been Successfully established!");
+            System.out.println("Con1nection to the Databases has been Successfully established!");
 
             Scanner UserInput = new Scanner(System.in);
             boolean running = true;

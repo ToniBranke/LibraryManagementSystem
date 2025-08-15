@@ -14,7 +14,7 @@ public class Book
         this.conn = conn;
     }
 
-    public  void addBook()
+    public void addBook()
     {
         Scanner sc = new Scanner(System.in);
 
@@ -108,52 +108,64 @@ public class Book
     {
         Scanner scManipulate = new Scanner(System.in);
 
-        System.out.println("What would you like to manipulate?\n  1. ISBN\n  2. Title\n  3. Author\n  4. Publisher\n  5.Genre\n" +
-                "  6. Publishing Date (DD-MM-YYYY)\n  7. Language\n  8. Format\n  9. USK\n  10. Price\n  11. Themes\n  12. Status\n" +
-                "Please enter your chooice:");
-        String manipulate = scManipulate.nextLine();
+        manipulateBook manipulator = new manipulateBook(conn);
+        boolean running = true;
 
-        switch (manipulate)
+
+
+        while (running)
         {
-            case "1":
-                manipulateBook.manIsbn();
-                break;
-            case "2":
-                manipulateBook.manTitle();
-                break;
-            case "3":
-                manipulateBook.manAuthor();
-                break;
-            case "4":
-                manipulateBook.manPubliisher();
-                break;
-            case "5":
-                manipulateBook.manGenre();
-                break;
-            case "6":
-                manipulateBook.manPubDate();
-                break;
-            case "7":
-                manipulateBook.manLang();
-                break;
-            case "8":
-                manipulateBook.manformat();
-                break;
-            case "9":
-                manipulateBook.manUsk();
-                break;
-            case "10":
-                manipulateBook.manPrice();
-                break;
-            case "11":
-                manipulateBook.manThemes();
-                break;
-            case "12":
-                manipulateBook.manStatus();
-                break;
-            default:
-                System.out.println("Invalid input please enter a valid answer!");
-                break;
+            System.out.println("What would you like to manipulate?\n  1. ISBN\n  2. Title\n  3. Author\n  4. Publisher\n  5.Genre\n" +
+                "  6. Publishing Date (DD-MM-YYYY)\n  7. Language\n  8. Format\n  9. USK\n  10. Price\n  11. Themes\n  12. Status\n  13. Exit\n" +
+                "Please enter your chooice:");
+
+            String manipulate = scManipulate.nextLine();
+
+            switch (manipulate)
+            {
+                case "1":
+                    manipulator.manIsbn();
+                    break;
+                case "2":
+                    manipulator.manTitle();
+                    break;
+                case "3":
+                    manipulator.manAuthor();
+                    break;
+                case "4":
+                    manipulator.manPubliisher();
+                    break;
+                case "5":
+                    manipulator.manGenre();
+                    break;
+                case "6":
+                    manipulator.manPubDate();
+                    break;
+                case "7":
+                    manipulator.manLang();
+                    break;
+                case "8":
+                    manipulator.manformat();
+                    break;
+                case "9":
+                    manipulator.manUsk();
+                    break;
+                case "10":
+                    manipulator.manPrice();
+                    break;
+                case "11":
+                    manipulator.manThemes();
+                    break;
+                case "12":
+                    manipulator.manStatus();
+                    break;
+                case "13":
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid input please enter a valid answer!");
+                    break;
+            }
         }
     }
 }
