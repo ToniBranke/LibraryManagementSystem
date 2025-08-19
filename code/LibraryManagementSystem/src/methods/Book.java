@@ -1,9 +1,8 @@
 package methods;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Book
@@ -175,26 +174,73 @@ public class Book
         {
             Scanner sc = new Scanner(System.in);
 
-            System.out.println("what would you like to display?\n  1. display everything\n  2. Title\n  3. Author\n  4. Publisher\n  5. Genre\n 6. Publishing Date\n  6. Language\n  7. Format\n" +
+            System.out.println("what would you like to display?\n  1. display everything\n  2. Title\n  3. Author\n  4. Publisher\n  5. Genre\n  6. Publishing Date\n  6. Language\n  7. Format\n" +
                     "  8. USK\n  9. Price\n  11. Themes\n  12. Status\n  13. Exit");
             String search = sc.nextLine();
             switch (search)
             {
                 case "1":
-                    System.out.println("Please enter the ISBN of the Book you search:");
-                    String isbnSearch = sc.nextLine();
+                    System.out.println("Displaying all the books:");
+                    String sql = "SELECT * FROM Books";
 
-                    String sql = "SELECT * FROM Books WHERE ISBN = ?";
-                    try(PreparedStatement pstmt = conn.prepareStatement(sql))
-                    {
-                        pstmt.setString(1, isbnSearch);
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
                         ResultSet rs = pstmt.executeQuery();
+
+                        while (rs.next())
+                        {
+                            ResultSetMetaData rsmd = rs.getMetaData();
+                            int columnCount = rsmd.getColumnCount();
+
+
+                            
+                            int size2 = 40;
+
+                            //displaying first the table head and the values afterward
+                            for(int i = 1; i <= columnCount; i++)
+                            {
+                                System.out.printf("%-" + size2 + "s" , rsmd.getColumnName(i));
+                            }
+
+                            System.out.println("\n"+"-".repeat(size2*columnCount));
+
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                System.out.printf("%-" + size2 + "s" , value);
+                            }
+//                            System.out.println("\n ----------------------------------------------------------------------");
+                        }
                     }
-                    catch(SQLException e)
+                    catch (SQLException e)
                     {
                         throw new RuntimeException(e);
                     }
                     break;
+
+
+                case "13":
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid input please enter a valid answer!");
+                    break;
+
+//                    System.out.println("Please enter the ISBN of the Book you search:");
+//                    String isbnSearch = sc.nextLine();
+//
+//                    String sql = "SELECT ? FROM Books WHERE ISBN";
+//                    try(PreparedStatement pstmt = conn.prepareStatement(sql))
+//                    {
+//                        pstmt.setString(1, isbnSearch);
+//                        ResultSet rs = pstmt.executeQuery();
+//                    }
+//                    catch(SQLException e)
+//                    {
+//                        throw new RuntimeException(e);
+//                    }
+//                    break;
             }
 
         }
