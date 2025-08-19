@@ -186,31 +186,48 @@ public class Book
                     try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
                         ResultSet rs = pstmt.executeQuery();
 
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
                         while (rs.next())
                         {
-                            ResultSetMetaData rsmd = rs.getMetaData();
-                            int columnCount = rsmd.getColumnCount();
-
-
-                            
-                            int size2 = 40;
-
-                            //displaying first the table head and the values afterward
-                            for(int i = 1; i <= columnCount; i++)
-                            {
-                                System.out.printf("%-" + size2 + "s" , rsmd.getColumnName(i));
-                            }
-
-                            System.out.println("\n"+"-".repeat(size2*columnCount));
-
+                            String[] row = new String[columnCount];
                             for (int i = 1; i <= columnCount; i++)
                             {
                                 String value = rs.getString(i);
 
                                 if (value == null) value= " ";
-                                System.out.printf("%-" + size2 + "s" , value);
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
                             }
+                            rows.add(row);
 //                            System.out.println("\n ----------------------------------------------------------------------");
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
                         }
                     }
                     catch (SQLException e)
