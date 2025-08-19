@@ -192,8 +192,6 @@ public class Book
                         List<String[]> rows = new ArrayList<>();
                         int[] maxWidth = new int[columnCount];
 
-
-
                         //displaying first the table head and the values afterward
                         for(int i = 1; i <= columnCount; i++)
                         {
@@ -213,7 +211,6 @@ public class Book
                                 if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
                             }
                             rows.add(row);
-//                            System.out.println("\n ----------------------------------------------------------------------");
                         }
                         for (int i = 1; i <= columnCount; i++)
                         {
@@ -236,6 +233,12 @@ public class Book
                     }
                     break;
 
+                case "2":
+                    System.out.println("please enter the title you want to look for:");
+                    String title = sc.nextLine();
+                    System.out.println("Displaying all the books with the Title:" + title);
+
+                    String sql = "SELECT  ";
 
                 case "13":
                     running = false;
