@@ -1,8 +1,90 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import methods.Book;
+
+import java.sql.Connection;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+
 public class Main
 {
+//    public static void connectBooks()
+//    {
+//        var urlBooks = "jdbc:sqlite:DB/Books.db";
+//
+//
+//        try (var conn = DriverManager.getConnection(urlBooks))
+//        {
+//            System.out.println("Connection to the BookDB has been successfully established.");
+//        }
+//        catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
+//    public static void connectEmployees()
+//    {
+//        var urlEmployees = "jdbc:sqlite:DB/mitarbeiter.db";
+//
+//        try (var connE = DriverManager.getConnection(urlEmployees))
+//        {
+//            System.out.println("Connection to the EmployeeDB has been successfully established.");
+//        }
+//        catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
+
     public static void main(String[] args)
     {
+//        connectBooks();
+//        connectEmployees();
+
+        var urlEmployees = "jdbc:sqlite:DB/mitarbeiter.db";
+        var urlBooks = "jdbc:sqlite:DB/Books.db";
+
+        try
+        (   Connection connBooks = DriverManager.getConnection(urlBooks);
+            Connection connEmployees = DriverManager.getConnection(urlEmployees))
+        {
+            System.out.println("Books-DB-URL: " + connBooks.getMetaData().getURL());
+            System.out.println("Con1nection to the Databases has been Successfully established!");
+
+            Scanner UserInput = new Scanner(System.in);
+            boolean running = true;
+            Book book = new Book(connBooks);
+
+            while(running)
+            {
+                System.out.println("=== main menu ===\n  1. add Book\n  2. delete a Book\n  3. change books \n  4. search for books\n  5. exit \nplease enter your choice:");
+                String input = UserInput.nextLine();
+                switch (input)
+                {
+                    case "1":
+                        book.addBook();
+                        break;
+                    case "2":
+                        book.deleteBook();
+                        break;
+                    case "3":
+                        book.manipulateBook();
+                        break;
+                    case "4":
+                        book.searchBook();
+                        break;
+                    case "5":
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Invalid input, please try again!");
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
