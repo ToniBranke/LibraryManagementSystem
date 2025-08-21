@@ -49,8 +49,10 @@ public class Main
         (   Connection connBooks = DriverManager.getConnection(urlBooks);
             Connection connEmployees = DriverManager.getConnection(urlEmployees))
         {
-            System.out.println("Books-DB-URL: " + connBooks.getMetaData().getURL());
-            System.out.println("Con1nection to the Databases has been Successfully established!");
+            System.out.println("Book Databasee connected at URL: " + connBooks.getMetaData().getURL());
+            System.out.println("Customer Database connected at URL: " + connEmployees.getMetaData().getURL());
+
+            User user = new User(connEmployees);
 
             Scanner UserInput = new Scanner(System.in);
             boolean running = true;
@@ -75,6 +77,8 @@ public class Main
                         book.searchBook();
                         break;
                     case "5":
+                        user.
+                    case "6":
                         running = false;
                         break;
                     default:

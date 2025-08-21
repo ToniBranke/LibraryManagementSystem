@@ -174,8 +174,8 @@ public class Book
         {
             Scanner sc = new Scanner(System.in);
 
-            System.out.println("what would you like to display?\n  1. display everything\n  2. Title\n  3. Author\n  4. Publisher\n  5. Genre\n  6. Publishing Date\n  6. Language\n  7. Format\n" +
-                    "  8. USK\n  9. Price\n  11. Themes\n  12. Status\n  13. Exit");
+            System.out.println("what would you like to display?\n  1. display everything\n  2. Title\n  3. Author\n  4. Publisher\n  5. Genre\n  6. Publishing Date\n  7. Language\n  8. Format\n" +
+                    "  9. USK\n  10. Price\n  11. Themes\n  12. Status\n  13. Exit");
             String search = sc.nextLine();
             switch (search)
             {
@@ -467,13 +467,11 @@ public class Book
                     }
                     break;
 
-                    // From here not working rn needs fix with the input idk
-
                 case "6":
-                    System.out.println("please enter the Publishing date you want to look for:");
+                    System.out.println("please enter the Publishing date (yyyy-mm-dd) you want to look for:");
                     String pubDateIn = sc.nextLine();
                     System.out.println("Displaying all the books published at the " + pubDateIn + ": \n");
-                    String sql6 = "SELECT * FROM Books WHERE publisherDate LIKE ?";
+                    String sql6 = "SELECT * FROM Books WHERE publishingDate LIKE ?";
 
                     try(PreparedStatement pstmt = conn.prepareStatement(sql6))
                     {
@@ -530,7 +528,7 @@ public class Book
                 case "7":
                     System.out.println("please enter the language you want to look for:");
                     String langIn = sc.nextLine();
-                    System.out.println("Displaying all the books in the " + langIn + " language: \n");
+                    System.out.println("Displaying all the books in" + langIn + ": \n");
                     String sql7 = "SELECT * FROM Books WHERE language LIKE ?";
 
                     try(PreparedStatement pstmt = conn.prepareStatement(sql7))
@@ -702,7 +700,7 @@ public class Book
                     break;
 
                 case "10":
-                    System.out.println("please enter the price you want to look for:");
+                    System.out.println("please enter the price you want to look for (**.**):");
                     String priceIn = sc.nextLine();
                     System.out.println("Displaying all the books that cost " + priceIn + "€ : \n");
                     String sql10 = "SELECT * FROM Books WHERE price LIKE ?";
@@ -763,11 +761,11 @@ public class Book
                     System.out.println("please enter the theme you want to look for:");
                     String themeIn = sc.nextLine();
                     System.out.println("Displaying all the books with the Theme/s: " + themeIn + ": \n");
-                    String sql11 = "SELECT * FROM Books WHERE theme LIKE ?";
+                    String sql11 = "SELECT * FROM Books WHERE themes LIKE ?";
 
                     try(PreparedStatement pstmt = conn.prepareStatement(sql11))
                     {
-                        pstmt.setString(1, themeIn);
+                        pstmt.setString(1, "%" + themeIn + "%");
                         ResultSet rs = pstmt.executeQuery();
 
                         ResultSetMetaData rsmd = rs.getMetaData();
@@ -881,21 +879,6 @@ public class Book
                     default:
                         System.out.println("Invalid input please enter a valid answer!");
                         break;
-
-//                    System.out.println("Please enter the ISBN of the Book you search:");
-//                    String isbnSearch = sc.nextLine();
-//
-//                    String sql = "SELECT ? FROM Books WHERE ISBN";
-//                    try(PreparedStatement pstmt = conn.prepareStatement(sql))
-//                    {
-//                        pstmt.setString(1, isbnSearch);
-//                        ResultSet rs = pstmt.executeQuery();
-//                    }
-//                    catch(SQLException e)
-//                    {
-//                        throw new RuntimeException(e);
-//                    }
-//                    break;
             }
 
         }

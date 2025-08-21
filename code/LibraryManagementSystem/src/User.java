@@ -1,28 +1,26 @@
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class User
 {
-    private String id;
-    private String name;
-    private String email;
-    private String password;
+    private final Connection conn;
 
-    public User(String id, String name, String email, String password)
+    public User(Connection conn)
     {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-
+        this.conn = conn;
     }
 
-//    public boolean login()
-//    {
-//        Scanner sc = new Scanner(System.in);
-//        if (sc.next().equals(password))
-//        {
-//            return true;
-//        }
-//        return false;
-//    }
+    public void Login()
+    {
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

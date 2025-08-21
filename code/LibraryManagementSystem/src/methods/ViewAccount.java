@@ -1,4 +1,6 @@
 package methods;
 
-public class ViewAccount {
+public class ViewAccount
+{
+
 }
