@@ -167,7 +167,7 @@ public class Book
         }
     }
 
-    public void searchBook()
+    public void searchBook()    //heavily needs to be shortened/optimised
     {
         boolean running = true;
         while(running)
@@ -186,31 +186,45 @@ public class Book
                     try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
                         ResultSet rs = pstmt.executeQuery();
 
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
                         while (rs.next())
                         {
-                            ResultSetMetaData rsmd = rs.getMetaData();
-                            int columnCount = rsmd.getColumnCount();
-
-
-                            
-                            int size2 = 40;
-
-                            //displaying first the table head and the values afterward
-                            for(int i = 1; i <= columnCount; i++)
-                            {
-                                System.out.printf("%-" + size2 + "s" , rsmd.getColumnName(i));
-                            }
-
-                            System.out.println("\n"+"-".repeat(size2*columnCount));
-
+                            String[] row = new String[columnCount];
                             for (int i = 1; i <= columnCount; i++)
                             {
                                 String value = rs.getString(i);
 
                                 if (value == null) value= " ";
-                                System.out.printf("%-" + size2 + "s" , value);
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
                             }
-//                            System.out.println("\n ----------------------------------------------------------------------");
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
                         }
                     }
                     catch (SQLException e)
@@ -219,13 +233,654 @@ public class Book
                     }
                     break;
 
+                case "2":
+                    System.out.println("please enter the title you want to look for:");
+                    String titleIn = sc.nextLine();
+                    System.out.println("Displaying all the books with the Title: " + titleIn);
 
-                case "13":
-                    running = false;
+                    String sql2 = "SELECT * FROM Books WHERE title LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql2))
+                    {
+                        pstmt.setString(1, titleIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
                     break;
-                default:
-                    System.out.println("Invalid input please enter a valid answer!");
+
+                case "3":
+                    System.out.println("please enter the Author you want to look for:");
+                    String AuthIn = sc.nextLine();
+                    System.out.println("Displaying all of " + AuthIn + "'s Books: \n");
+
+                    String sql3 = "SELECT * FROM Books WHERE author LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql3))
+                    {
+                        pstmt.setString(1, AuthIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
                     break;
+
+                case "4":
+                    System.out.println("please enter the Publisher you want to look for:");
+                    String pubIn = sc.nextLine();
+                    System.out.println("Displaying all the books published by " + pubIn + ": \n");
+                    String sql4 = "SELECT * FROM Books WHERE publisher LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql4))
+                    {
+                        pstmt.setString(1, pubIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "5":
+                    System.out.println("please enter the genre you want to look for:");
+                    String genIn = sc.nextLine();
+                    System.out.println("Displaying all the books of the Genre: " + genIn + ": \n");
+                    String sql5 = "SELECT * FROM Books WHERE genre LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql5))
+                    {
+                        pstmt.setString(1, genIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                    // From here not working rn needs fix with the input idk
+
+                case "6":
+                    System.out.println("please enter the Publishing date you want to look for:");
+                    String pubDateIn = sc.nextLine();
+                    System.out.println("Displaying all the books published at the " + pubDateIn + ": \n");
+                    String sql6 = "SELECT * FROM Books WHERE publisherDate LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql6))
+                    {
+                        pstmt.setString(1, pubDateIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "7":
+                    System.out.println("please enter the language you want to look for:");
+                    String langIn = sc.nextLine();
+                    System.out.println("Displaying all the books in the " + langIn + " language: \n");
+                    String sql7 = "SELECT * FROM Books WHERE language LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql7))
+                    {
+                        pstmt.setString(1, langIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "8":
+                    System.out.println("please enter the format you want to look for:");
+                    String formatIn = sc.nextLine();
+                    System.out.println("Displaying all the books with the format: " + formatIn + ": \n");
+                    String sql8 = "SELECT * FROM Books WHERE format LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql8))
+                    {
+                        pstmt.setString(1, formatIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "9":
+                    System.out.println("please enter the USK-rating you want to look for:");
+                    String uskIn = sc.nextLine();
+                    System.out.println("Displaying all the rated: " + uskIn + ": \n");
+                    String sql9 = "SELECT * FROM Books WHERE usk LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql9))
+                    {
+                        pstmt.setString(1, uskIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "10":
+                    System.out.println("please enter the price you want to look for:");
+                    String priceIn = sc.nextLine();
+                    System.out.println("Displaying all the books that cost " + priceIn + "€ : \n");
+                    String sql10 = "SELECT * FROM Books WHERE price LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql10))
+                    {
+                        pstmt.setString(1, priceIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "11":
+                    System.out.println("please enter the theme you want to look for:");
+                    String themeIn = sc.nextLine();
+                    System.out.println("Displaying all the books with the Theme/s: " + themeIn + ": \n");
+                    String sql11 = "SELECT * FROM Books WHERE theme LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql11))
+                    {
+                        pstmt.setString(1, themeIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                case "12":
+                    System.out.println("please enter the status you want to look for:");
+                    String statIn = sc.nextLine();
+                    System.out.println("Displaying all the books with the Status: " + statIn + "\n");
+                    String sql12 = "SELECT * FROM Books WHERE status LIKE ?";
+
+                    try(PreparedStatement pstmt = conn.prepareStatement(sql12))
+                    {
+                        pstmt.setString(1, statIn);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        ResultSetMetaData rsmd = rs.getMetaData();
+                        int columnCount = rsmd.getColumnCount();
+
+                        List<String[]> rows = new ArrayList<>();
+                        int[] maxWidth = new int[columnCount];
+
+                        //displaying first the table head and the values afterward
+                        for(int i = 1; i <= columnCount; i++)
+                        {
+                            String header = rsmd.getColumnLabel(i);
+                            maxWidth[i-1] = header.length();
+                        }
+
+                        while (rs.next())
+                        {
+                            String[] row = new String[columnCount];
+                            for (int i = 1; i <= columnCount; i++)
+                            {
+                                String value = rs.getString(i);
+
+                                if (value == null) value= " ";
+                                row[i-1] = value;
+                                if (value.length() > maxWidth[i-1]) maxWidth[i-1] = value.length();
+                            }
+                            rows.add(row);
+                        }
+                        for (int i = 1; i <= columnCount; i++)
+                        {
+                            System.out.printf("%-"+(maxWidth[i-1]+2)+"s", rsmd.getColumnLabel(i));
+                        }
+                        System.out.println();
+
+                        for(String[] row : rows)
+                        {
+                            for (int i = 0; i < columnCount; i++)
+                            {
+                                System.out.printf("%-"+(maxWidth[i]+2)+"s", row[i]);
+                            }
+                            System.out.println();
+                        }
+                    }
+                    catch(SQLException e)
+                    {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                    case "13":
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Invalid input please enter a valid answer!");
+                        break;
 
 //                    System.out.println("Please enter the ISBN of the Book you search:");
 //                    String isbnSearch = sc.nextLine();
