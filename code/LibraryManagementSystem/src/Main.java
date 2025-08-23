@@ -46,8 +46,8 @@ public class Main
         var urlBooks = "jdbc:sqlite:DB/Books.db";
 
         try
-        (   Connection connBooks = DriverManager.getConnection(urlBooks);
-            Connection connEmployees = DriverManager.getConnection(urlEmployees))
+                (   Connection connBooks = DriverManager.getConnection(urlBooks);
+                    Connection connEmployees = DriverManager.getConnection(urlEmployees))
         {
             System.out.println("Book Databasee connected at URL: " + connBooks.getMetaData().getURL());
             System.out.println("Customer Database connected at URL: " + connEmployees.getMetaData().getURL());
@@ -77,7 +77,8 @@ public class Main
                         book.searchBook();
                         break;
                     case "5":
-                        user.
+                        user.login();
+                        break;
                     case "6":
                         running = false;
                         break;
