@@ -77,7 +77,7 @@ public class Main
                         book.searchBook();
                         break;
                     case "5":
-                        user.login();
+                        user.createUser();
                         break;
                     case "6":
                         running = false;
