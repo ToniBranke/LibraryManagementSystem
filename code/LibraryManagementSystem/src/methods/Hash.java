@@ -26,7 +26,6 @@ public class Hash
         }
         return hash.toString();
     }
-
     public static void main(String args[])
     {
         try

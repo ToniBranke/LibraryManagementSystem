@@ -198,7 +198,6 @@ public class Book
                             String header = rsmd.getColumnLabel(i);
                             maxWidth[i-1] = header.length();
                         }
-
                         while (rs.next())
                         {
                             String[] row = new String[columnCount];
@@ -232,7 +231,6 @@ public class Book
                         throw new RuntimeException(e);
                     }
                     break;
-
                 case "2":
                     System.out.println("please enter the title you want to look for:");
                     String titleIn = sc.nextLine();
