@@ -2,15 +2,15 @@ package methods;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-import static methods.MainMenu.mainMenu;
+import methods.MainMenu;
 
 public class Login
 {
     private final Connection conn;
+    MainMenu mainMenu = new MainMenu();
+
     public Login(Connection conn)
     {
         this.conn = conn;
@@ -59,7 +59,7 @@ public class Login
         }
         if(loggedIn)
         {
-            mainMenu();
+            mainMenu.AdminMainMenu();
         }
     }
 }

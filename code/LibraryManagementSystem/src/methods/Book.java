@@ -878,8 +878,6 @@ public class Book
                         System.out.println("Invalid input please enter a valid answer!");
                         break;
             }
-
         }
-
     }
 }
