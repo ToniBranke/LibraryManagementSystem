@@ -5,6 +5,7 @@ import methods.Hash;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -15,6 +16,7 @@ public class User
     {
         this.conn = conn;
     }
+
     public void createUser()
     {
         Scanner sc = new Scanner(System.in);
@@ -33,7 +35,6 @@ public class User
         String role = sc.nextLine();
         if (password.equals(password2))
         {
-            System.out.println(password + " , " + password2);
             try
             {
                 byte[] hashBytes = Hash.getSha(password);
@@ -62,5 +63,57 @@ public class User
             }
         }
     }
+    public void deleteUser()
+    {
+        Scanner sc = new Scanner(System.in);
 
+        System.out.println("Please enter the email address and Password of the User you want to delete: \n email: ");
+        String email = sc.nextLine();
+        System.out.println("password: ");
+        String password = sc.nextLine();
+
+        String sql1 = "SELECT passwordHash FROM Users WHERE email = ?";
+        String hashedPassword = null;
+        String dbHash = null;
+
+        try(PreparedStatement pstmt = conn.prepareStatement(sql1))
+        {
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            dbHash = rs.getString("passwordHash");
+            System.out.println(dbHash);
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        try
+        {
+            byte[] hashBytes = Hash.getSha(password);
+            hashedPassword = Hash.shaHash(hashBytes);
+            System.out.println(hashedPassword);
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        if (dbHash.equals(hashedPassword))
+        {
+            String sql = "DELETE FROM Users WHERE email = ? ";
+            System.out.println(sql + "passwords match");
+            try (PreparedStatement pstmt = conn.prepareStatement(sql))
+            {
+                pstmt.setString(1, email);
+//              pstmt.setString(2, password);
+                pstmt.executeUpdate();
+                System.out.println("User deleted successfully");
+            }
+            catch (SQLException e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 }
