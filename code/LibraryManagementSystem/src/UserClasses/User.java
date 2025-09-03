@@ -116,4 +116,17 @@ public class User
             }
         }
     }
+    public void displayUser()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("what would you like to display?\n  1. every User\n  2. specific user\nplease enter your choice: ");
+        String choice = sc.nextLine();
+
+        String sql = "SELECT * FROM Users";
+        switch(sc.nextLine())
+        {
+            case "1":
+            
+        }
+    }
 }
