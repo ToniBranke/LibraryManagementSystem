@@ -9,7 +9,6 @@ import UserClasses.*;
 
 public class MainMenu
 {
-
     public void AdminMainMenu()
     {
         var urlEmployees = "jdbc:sqlite:DB/mitarbeiter.db";

@@ -21,6 +21,8 @@ public class Login
 
         String sql = "SELECT passwordHash FROM users WHERE email = ?";
         String hashedPassword = null;
+        String email = null;
+        String role = null;
 
         boolean loggedIn = false;
 
@@ -28,7 +30,7 @@ public class Login
         {
             System.out.println("=== Login ===");
             System.out.println("  please enter your email address: ");
-            String email = input.nextLine();
+            email = input.nextLine();
             System.out.println("  please enter your password: ");
             String password = input.nextLine();
 
@@ -59,7 +61,34 @@ public class Login
         }
         if(loggedIn)
         {
-            mainMenu.AdminMainMenu();
+            String sql2 = "SELECT role FROM users WHERE email = ?";
+            try(PreparedStatement stRole = conn.prepareStatement(sql2))
+            {
+                stRole.setString(1, email);
+                ResultSet rsRole = stRole.executeQuery();
+                role = rsRole.getString("role");
+            }
+            catch(SQLException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println(role);
+
+            switch(role)
+            {
+                case "customer":
+                    mainMenu.customerMenu();
+                    break;
+                case "cashier":
+                    mainMenu.cashierMenu();
+                    break;
+                case "librarian":
+                    mainMenu.librarianMenu();
+                    break;
+                case "admin":
+                    mainMenu.AdminMainMenu();
+                    break;
+            }
         }
     }
 }
